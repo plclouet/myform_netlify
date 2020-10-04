@@ -1,0 +1,297 @@
+<html>
+<head>
+   
+    <link rel="stylesheet" href="vendors/formvalidation/dist/css/formValidation.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/css/bootstrap-datepicker3.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+   <!-- CDN de sweetalert2 -->
+   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+</head>
+<body>
+    <form id="demoForm">
+       <div class="container fluid">
+        <!-- prénom -->
+        <div class="form-group row">
+            <label class="col-sm-3 col-form-label">Prénom</label>
+            <div class="col-sm-6">
+                <input type="text" class="form-control" name="firstName" />
+            </div>
+        </div>
+
+        <!-- nom -->
+        <div class="form-group row">
+            <label class="col-sm-3 col-form-label">Nom</label>
+            <div class="col-sm-6">
+                <input type="text" class="form-control" name="lastName" />
+            </div>
+        </div>
+
+        <!-- date de naissance -->
+        <div class="form-group row">
+            <label class="col-sm-3 col-form-label">date de naissance</label>
+            <div class="col-sm-6">
+                <input type="text" class="form-control" placeholder="DD/MM/YYYY" name="birthDate" />
+            </div>
+        </div>
+
+        <!-- examen -->
+        <div class="form-group row">
+            <label class="col-sm-3 col-form-label">examen</label>
+            <div class="col-sm-6">
+                <select className="browser-default custom-select"
+                  name="examen"
+                  value={examen} 
+                  >
+                    <option>Choisir une option</option>
+                    <option value="IRM">IRM</option>
+                    <option value="Scanner">Scanner</option>
+                    
+                </select>
+            </div>
+        </div>
+
+        <!-- dateExamen -->
+        <div class="form-group row">
+            <label class="col-sm-3 col-form-label">dateExamen</label>
+            <div class="col-sm-6">
+                <input type="text" class="form-control"  name="dateExamen" />
+            </div>
+        </div>
+
+        <!-- numéro de téléphone -->
+        <div class="form-group row">
+            <label class="col-sm-3 col-form-label">numéro de téléphone</label>
+            <div class="col-sm-6">
+                <input type="text" class="form-control" name="phoneNumber" />
+            </div>
+        </div>
+
+        <!-- file -->
+        <div class="form-group row">
+            <label class="col-sm-3 col-form-label">ordonnance</label>
+            <div class="col-sm-5">
+                <input type="file" class="form-control" name="imageOrdo"/>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-sm-9 offset-sm-3">
+                <button type="submit" value="Submit" class="btn btn-primary">Submit</button>
+            </div>
+        </div>
+    </div>
+    </form>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/js/bootstrap-datepicker.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/es6-shim/0.35.3/es6-shim.min.js"></script>
+
+<script src="vendors/formvalidation/dist/js/FormValidation.min.js"></script>
+
+<script src="vendors/formvalidation/dist/js/plugins/Bootstrap.min.js"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="moment.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function(e) {
+    const fv =  FormValidation.formValidation(
+        document.getElementById('demoForm'),
+        {
+            fields: {
+                firstName: {
+                    validators: {
+                        notEmpty: {
+                            message: 'Le prénom est requis'
+                        },
+                        stringLength: {
+                            min: 2,
+                            max: 30,
+                            message: 'Le prénom doit comporter entre 2 et 30',
+                        },
+                        regexp: {
+                            regexp: /^[a-zA-Z0-9_\-]+$/,
+                            message: 'uniquement des lettres, chiffres, trait d\'union et underscore',
+                        },
+                    }
+                },
+                lastName: {
+                    validators: {
+                        notEmpty: {
+                            message: 'Le nom est requis'
+                        },
+                        stringLength: {
+                            min: 2,
+                            max: 30,
+                            message: 'Le prénom doit comporter entre 2 et 30',
+                        },
+                        regexp: {
+                            regexp: /^[a-zA-Z0-9_\-]+$/,
+                            message: 'uniquement des lettres, chiffres, trait d\'union et underscore',
+                        },
+                    }
+                },
+                birthDate: {
+                    validators: {
+                        date: {
+                            format: 'DD/MM/YYYY',
+                            message: 'la valeur n\'est pas une date valide',
+                        }
+                    }
+                },
+                dateExamen: {
+                    validators: {
+                        date: {
+                            format: 'DD/MM/YYYY',
+                            message: 'la valeur nest pas une date valide',
+                        }
+                    }
+                },
+                phoneNumber: {
+                    validators: {
+                        phone: {
+                            country: 'FR',
+                            message: 'Entrez un numéro valide'
+                        }
+                    }
+                },
+                imageOrdo: {
+                    validators: {
+                        notEmpty: {
+                            message: 'SVP sélectionner une image'
+                        },
+                        file: {
+                            extension: 'jpeg,jpg,png,pdf',
+                            type: 'image/jpeg,image/png, application/pdf',
+                            maxSize: 2097152,   // 2048 * 1024
+                            message: 'le fichier choisi n\'est pas valide'
+                        },
+                    }
+                },
+            },
+            plugins: {
+                trigger: new FormValidation.plugins.Trigger(),
+                bootstrap: new FormValidation.plugins.Bootstrap(),
+                submitButton: new FormValidation.plugins.SubmitButton(),
+              //  defaultSubmit: new FormValidation.plugins.DefaultSubmit(),
+                icon: new FormValidation.plugins.Icon({
+                    valid: 'fa fa-check',
+                    invalid: 'fa fa-times',
+                    validating: 'fa fa-refresh',
+                }),
+            },
+
+
+            
+         }).on('core.form.valid', function() {
+
+
+            const request = new XMLHttpRequest();
+            var formData = new FormData();
+            const FORMAT = "dd, MM Do YYYY";
+            const data = {};
+            // Append the text fields
+            const firstName = demoForm.querySelector('[name="firstName"]');
+            const lastName = demoForm.querySelector('[name="lastName"]');
+            const birthDate = demoForm.querySelector('[name="birthDate"]');
+            const examen = demoForm.querySelector('[name="examen"]');
+            const dateExamen = demoForm.querySelector('[name="dateExamen"]');
+            console.log(birthDate, examen, dateExamen)
+            console.log(birthDate.value, examen.value, dateExamen.value)
+            const phoneNumber = demoForm.querySelector('[name="phoneNumber"]');
+            const imageOrdo = demoForm.querySelector('[name="imageOrdo"]');
+            data[firstName.name] = firstName.value;
+            data[lastName.name] = lastName.value;
+        
+            const birthDateMoment = moment(birthDate.value,'DD/MM/YYYY').format('MM/DD/YYYY');
+            console.log(birthDateMoment)
+            data[birthDate.name] = moment(birthDateMoment, FORMAT);
+            data[examen.name] = examen.value;
+
+            const dateExamenMoment = moment(dateExamen.value,'DD/MM/YYYY').format('MM/DD/YYYY');
+            console.log(dateExamenMoment)
+            data[dateExamen.name] = moment(dateExamenMoment, FORMAT);
+            data[phoneNumber.name] = phoneNumber.value;
+            formData.append('data', JSON.stringify(data));
+          
+          if (imageOrdo.files.length === 1) {
+            const file = imageOrdo.files[0];
+            const newName = new Date().getTime() + file.name;
+            formData.append(`files.imageOrdo`, file, newName);
+          } else {
+            for (let i = 0; i < imageOrdo.files.length; i++) {
+              const file = imageOrdo.files[i];
+              const newName = new Date().getTime() + file.name;
+              formData.append(`files.imageOrdo`, file, newName);
+
+            }
+        }
+            for (var p of formData) {
+                console.log(p);
+              }
+              request.open('POST', `https://frozen-dawn-43758.herokuapp.com/ordonnances`);
+  
+               request.send(formData);
+               document.getElementById("demoForm").reset();
+               submitAlert();
+            // axios({
+            //     method: 'post',
+            //     url:  `http://localhost:1337/ordonnances`,
+            //     body: formData,
+            //     headers: {
+            //         'Content-Type': 'multipart/form-data'
+            //     }
+            // }).then(function(response) {
+            //    console.log(response)
+            // });
+         
+     
+
+    
+
+   
+   
+
+    
+});
+
+   
+       $('[name="dateExamen"]')
+        .datepicker({
+            format: 'dd/mm/yyyy'
+        })
+        .on('changeDate', function(e) {
+            // Revalidate the date field
+            fv.revalidateField('dateExamen');
+        });
+ 
+   
+        
+
+
+    });
+
+    
+  </script>
+<script type="text/javascript"> 
+
+    function fireSweetAlert() {
+            Swal.fire(
+                'Good job!',
+                'You clicked the button!',
+                'success'
+            )
+        };
+
+    function submitAlert() {
+            Swal.fire(
+                'Bravo!',
+                'votre ordonnance est envoyée',
+                'success'
+            ).then((result) => {document.location.reload(true)})
+        }
+</script>
+
+</body>
+</html>
