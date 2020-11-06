@@ -1,5 +1,9 @@
 <html>
 <head>
+    <title>Ordonnance Scanner IRM</title>
+
+     <!-- meta utile pour s'adapter automatiquement à la taille des devices -->
+     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
    
     <link rel="stylesheet" href="vendors/formvalidation/dist/css/formValidation.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/css/bootstrap-datepicker3.min.css">
@@ -7,11 +11,28 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
    <!-- CDN de sweetalert2 -->
    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <!-- blueimp load image -->
+   <script src="js/load-image.all.min.js"></script>
 
 </head>
 <body>
+
+    <div class="container py-5">
+        <div class="row">
+            <div class="mx-auto col-sm-10">
+
+                <div class="card">
+                    <div class="card-header">
+                      <div class="row">
+                        <div class="col"> <h4 class="mb-0">Votre ordonnance</h4></div>
+                      </div>
+                    </div> <!-- card-header-fin -->
+                            <!-- card-body -->
+                    <div class="card-body"> 
+
     <form id="demoForm">
-       <div class="container fluid">
+       
+
         <!-- prénom -->
         <div class="form-group row">
             <label class="col-sm-3 col-form-label">Prénom</label>
@@ -69,20 +90,26 @@
         </div>
 
         <!-- file -->
-        <div class="form-group row">
+        <div class="form-group row" id="imageOrdoDiv">
             <label class="col-sm-3 col-form-label">ordonnance</label>
             <div class="col-sm-5">
-                <input type="file" class="form-control" name="imageOrdo"/>
+                <input type="file" id="imageOrdo" class="form-control" name="imageOrdo"/>
             </div>
         </div>
 
         <div class="form-group row">
             <div class="col-sm-9 offset-sm-3">
-                <button type="submit" value="Submit" class="btn btn-primary">Submit</button>
+                <button id="inputBtn" type="submit" value="Submit" class="btn btn-primary">Submit</button>
             </div>
         </div>
-    </div>
-    </form>
+    
+    </form> 
+        </div><!-- card-body -->
+        </div><!-- card -->
+
+    </div><!-- col-fin -->
+    </div><!-- row-fin -->
+    </div><!-- container-fin -->
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/js/bootstrap-datepicker.min.js"></script>
@@ -164,8 +191,8 @@ document.addEventListener('DOMContentLoaded', function(e) {
                         file: {
                             extension: 'jpeg,jpg,png,pdf',
                             type: 'image/jpeg,image/png, application/pdf',
-                            maxSize: 2097152,   // 2048 * 1024
-                            message: 'le fichier choisi n\'est pas valide'
+                            maxSize: 4194304,   // 1024 * 4 * 1024
+                            message: 'fichier jpeg,jpg,png,pdf inférieur à 4M'
                         },
                     }
                 },
@@ -230,8 +257,8 @@ document.addEventListener('DOMContentLoaded', function(e) {
             for (var p of formData) {
                 console.log(p);
               }
-              request.open('POST', `https://frozen-dawn-43758.herokuapp.com/ordonnances`);
-  
+               request.open('POST', `https://frozen-dawn-43758.herokuapp.com/ordonnances`);
+              // request.open('POST', `http://localhost:1337/ordonnances`);
                request.send(formData);
                document.getElementById("demoForm").reset();
                submitAlert();
@@ -291,6 +318,19 @@ document.addEventListener('DOMContentLoaded', function(e) {
                 'success'
             ).then((result) => {document.location.reload(true)})
         }
+</script>
+<script type="text/javascript"> 
+// script pour blueimp load image
+document.getElementById('imageOrdo').onchange = function () {
+  loadImage(
+    this.files[0],
+    function (img) {
+        var node = document.getElementById("imageOrdoDiv");
+      node.appendChild(img)
+    },
+    { maxWidth: 50 } // Options
+  )
+}
 </script>
 
 </body>
