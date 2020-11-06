@@ -90,10 +90,16 @@
         </div>
 
         <!-- file -->
-        <div class="form-group row" id="imageOrdoDiv">
+        <div class="form-group row" >
             <label class="col-sm-3 col-form-label">ordonnance</label>
             <div class="col-sm-5">
                 <input type="file" id="imageOrdo" class="form-control" name="imageOrdo"/>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-3 col-form-label">aperçu</label>
+            <div class="col-sm-5" id="imageOrdoDiv">
+               
             </div>
         </div>
 
@@ -258,7 +264,7 @@ document.addEventListener('DOMContentLoaded', function(e) {
                 console.log(p);
               }
                request.open('POST', `https://frozen-dawn-43758.herokuapp.com/ordonnances`);
-              // request.open('POST', `http://localhost:1337/ordonnances`);
+             // request.open('POST', `http://localhost:1337/ordonnances`);
                request.send(formData);
                document.getElementById("demoForm").reset();
                submitAlert();
@@ -322,11 +328,13 @@ document.addEventListener('DOMContentLoaded', function(e) {
 <script type="text/javascript"> 
 // script pour blueimp load image
 document.getElementById('imageOrdo').onchange = function () {
-  loadImage(
+  const imageRotate = loadImage(
     this.files[0],
     function (img) {
         var node = document.getElementById("imageOrdoDiv");
-      node.appendChild(img)
+      node.appendChild(img);
+    
+     
     },
     { maxWidth: 50 } // Options
   )
